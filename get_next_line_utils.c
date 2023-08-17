@@ -59,42 +59,7 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t n)
 	return (ft_strlen(src));
 }
 
-char	*ft_strdup(const char *s)
-{
-	char	*buff;
-	int		len;
-	int		i;
-
-	len = ft_strlen(s) + 1;
-	buff = malloc(len);
-	i = 0;
-	if (!buff)
-		return (NULL);
-	ft_strlcpy(buff, s, len);
-	return (buff);
-}
-
-char	*ft_substr(char const *s, unsigned int start, size_t n)
-{
-	size_t	len_s;
-	size_t	size;
-	char	*dst;
-
-	len_s = ft_strlen(s);
-	if (!s)
-		return (NULL);
-	if (start >= len_s)
-		return (ft_strdup(""));
-	size = n + 1;
-	if (start + n > len_s)
-		size = len_s - start + 1;
-	dst = malloc(size);
-	if (!dst)
-		return (NULL);
-	ft_strlcpy(dst, s + start, size);
-	return (dst);
-}
-
+/*Changed to handle not existing s1.*/
 char	*ft_strjoin(char const *s1, char const *s2)
 {
 	size_t	size;
@@ -107,4 +72,18 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	ft_strlcpy(new, s1, ft_strlen(s1) + 1);
 	ft_strlcpy(new + ft_strlen(s1), s2, ft_strlen(s2) + 1);
 	return (new);
+}
+
+void	*ft_calloc_gnl(unsigned int count, unsigned int size)
+{
+	unsigned int	tot;
+	char			*buff;
+
+	tot = count * size;
+	buff = malloc(tot);
+	if (!buff)
+		return (NULL);
+	while (tot)
+		buff[--tot] = '\0';
+	return (buff);
 }

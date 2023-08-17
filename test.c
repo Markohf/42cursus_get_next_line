@@ -10,7 +10,7 @@ int main()
         printf("Error opening file.\n");
         return (1);
     }
-    while (get_next_line(fd))
+    printf("%s", get_next_line(fd));
     if (close(fd) == -1)
     {
         printf("Error closing file.\n");
