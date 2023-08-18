@@ -20,7 +20,7 @@ char	*read_file(char *buff_stash, int fd)
 	char	*buff_read;
 	ssize_t	read_error;
 	int		ctrl;
-	char	*ind;
+	char	*position;
 
 	buff_read = ft_calloc_gnl(BUFFER_SIZE, sizeof (char));
 	if (!buff_read)
@@ -35,25 +35,28 @@ char	*read_file(char *buff_stash, int fd)
 			return (NULL);
 		}
 		buff_stash = ft_strjoin(buff_stash, buff_read);
-		ind = ft_strchr(buff_stash, '\n');
-		if (ind >= buff_stash)
+		position = ft_strchr(buff_stash, '\n');
+		if (position >= buff_stash)
 			ctrl = 0;
 	}
-	free (buff_read);
+	free(buff_read);
 	return (buff_stash);
 }
 
 /**/
-char	*stash_clean(char *buff_stash)
+static char	*stash_clean(char *buff_stash)
 {
 	char	*new_stash;
+	char	*position;
 
+	position = ft_strchr(buff_stash, '\n') + 1;
+	if (!position)
+	{
+		free(buff_stash);
+		return (NULL);
+	}
 	new_stash = ft_calloc_gnl(1, sizeof (char));
-	//prueba
-	printf("new_stash:\t%s\n", new_stash);
-	new_stash = ft_strjoin(new_stash, ft_strchr(buff_stash, '\n') + 1);
-	//prueba
-	printf("new_stash:\t%s\n", new_stash);
+	new_stash = ft_strjoin(new_stash, position);
 	free(buff_stash);
 	return (new_stash);
 }
@@ -80,8 +83,5 @@ char	*get_next_line(int fd)
 		return (NULL);
 	ft_strlcpy(buff_line, buff_stash, size);
 	buff_stash = stash_clean(buff_stash);
-	//prueba
-	printf("buff_stash:\t%s\n", buff_stash);
 	return (buff_line);
 }
-/*como limpiar el stash, como manejar cuando se llega al final del texto y tener cuidado con que \n + 1 exista.*/
