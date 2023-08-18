@@ -5,15 +5,15 @@ int main()
     int fd;
     int y;
 
-    y = 0;
+    y = 1;
     fd = open("test.txt", O_RDONLY);
     if (fd == -1)
     {
         printf("Error opening file.\n");
         return (1);
     }
-    while(y++ < 30)
-        printf("%s", get_next_line(fd));
+    while(y > 0)
+        y = printf("%s", get_next_line(fd));
     if (close(fd) == -1)
     {
         printf("Error closing file.\n");

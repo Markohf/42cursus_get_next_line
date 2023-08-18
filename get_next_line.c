@@ -20,7 +20,6 @@ char	*read_file(char *buff_stash, int fd)
 	char	*buff_read;
 	ssize_t	read_error;
 	int		ctrl;
-	char	*position;
 
 	buff_read = ft_calloc_gnl(BUFFER_SIZE, sizeof (char));
 	if (!buff_read)
@@ -35,11 +34,10 @@ char	*read_file(char *buff_stash, int fd)
 			return (NULL);
 		}
 		buff_stash = ft_strjoin(buff_stash, buff_read);
-		position = ft_strchr(buff_stash, '\n');
-		if (position >= buff_stash)
+		if (ft_strchr(buff_stash, '\n') >= buff_stash)
 			ctrl = 0;
 	}
-	free(buff_read);
+	free (buff_read);
 	return (buff_stash);
 }
 
@@ -69,14 +67,19 @@ char	*get_next_line(int fd)
 	size_t		size;
 
 	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
-		return(NULL);
+		return (NULL);
 	if (!buff_stash)
 	{
 		buff_stash = ft_calloc_gnl(1, sizeof (char));
 		if (!buff_stash)
-			return(NULL);
+			return (NULL);
 	}
 	buff_stash = read_file(buff_stash, fd);
+	/*if (!buff_stash)
+	{
+		free(buff_stash);
+		return (NULL);
+	}*/
 	size = ft_strchr(buff_stash, '\n') - buff_stash + 2;
 	buff_line = ft_calloc_gnl(size, sizeof (char));
 	if (!buff_line)
