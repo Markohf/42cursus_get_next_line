@@ -13,7 +13,11 @@ int main()
         return (1);
     }
     while(y > 0)
+    {
+        printf("y1=%i\n", y);
         y = printf("%s", get_next_line(fd));
+        printf("y2=%i\n", y);
+    }
     if (close(fd) == -1)
     {
         printf("Error closing file.\n");
