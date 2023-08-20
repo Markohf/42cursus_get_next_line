@@ -19,6 +19,8 @@ size_t	ft_strlen(const char *s)
 	size_t	i;
 
 	i = 0;
+	if (!s)
+		return (i);
 	while (s[i] != '\0')
 		i++;
 	return (i);
@@ -47,7 +49,7 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t n)
 	size_t	i;
 
 	i = 0;
-	if (n > 0)
+	if (n > 0 && src)
 	{
 		while (src[i] && i < n - 1)
 		{
@@ -59,18 +61,29 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t n)
 	return (ft_strlen(src));
 }
 
-/*Changed to handle not existing s1.*/
-char	*ft_strjoin(char const *s1, char const *s2)
+char	*ft_strjoin_gnl(char const *s1, char const *s2)
 {
-	size_t	size;
+	size_t	len1;
+	size_t	len2;
 	char	*new;
 
-	size = ft_strlen(s1) + ft_strlen(s2);
-	new = malloc(size + 1);
+	if (!s1 && !s2)
+		return (NULL);
+/*	else if (!s1)
+	{
+		len2 = ft_strlen(s2);
+		new = malloc(len2 + 1);
+		if (!new)
+			return (NULL);
+		ft_strlcpy(new, s2, len2 + 1);
+	}*/
+	len1 = ft_strlen(s1);
+	len2 = ft_strlen(s2);
+	new = malloc(len1 + len2 + 1);
 	if (!new)
 		return (NULL);
-	ft_strlcpy(new, s1, ft_strlen(s1) + 1);
-	ft_strlcpy(new + ft_strlen(s1), s2, ft_strlen(s2) + 1);
+	ft_strlcpy(new, s1, len1 + 1);
+	ft_strlcpy(new + len1, s2, len2 + 1);
 	return (new);
 }
 

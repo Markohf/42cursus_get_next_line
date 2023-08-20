@@ -2,21 +2,22 @@
 
 int main()
 {
-    int fd;
-    int y;
+    int     fd;
+    int     y;
+    char    *line;
 
-    y = 1;
+    y = 0;
     fd = open("test.txt", O_RDONLY);
     if (fd == -1)
     {
         printf("Error opening file.\n");
         return (1);
     }
-    while(y > 0)
+    while(y++ < 3)
     {
-        printf("y1=%i\n", y);
-        y = printf("%s", get_next_line(fd));
-        printf("y2=%i\n", y);
+        line = get_next_line(fd);
+        printf("%s", line);
+        free(line);
     }
     if (close(fd) == -1)
     {
