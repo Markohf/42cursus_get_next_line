@@ -37,14 +37,10 @@ char	*ft_substr_gnl(char const *s, unsigned int start, size_t n)
 }
 
 /**/
-char	*read_file(char *buff_stash, int fd)
+char	*read_file(char *buff_read, char *buff_stash, int fd)
 {
-	char	*buff_read;
 	ssize_t	bytes_read;
 
-	buff_read = ft_calloc_gnl(BUFFER_SIZE + 1, sizeof (char));
-	if (!buff_read)
-		return (NULL);
 	bytes_read = 1;
 	while (bytes_read > 0)
 	{
@@ -54,6 +50,9 @@ char	*read_file(char *buff_stash, int fd)
 			free(buff_read);
 			return (NULL);
 		}
+		else if (bytes_read == 0)
+			break ;
+		buff_read[bytes_read] = '\0';
 		if (buff_stash)
 			buff_stash = ft_strjoin_gnl(buff_stash, buff_read);
 		else
@@ -106,12 +105,16 @@ char	*create_line(char *buff_stash)
 /*Main function.*/
 char	*get_next_line(int fd)
 {
+	char		*buff_read;
 	static char	*buff_stash;
 	char		*buff_line;
 
 	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0 || fd > OPEN_MAX)
 		return (NULL);
-	buff_stash = read_file(buff_stash, fd);
+	buff_read = ft_calloc_gnl(BUFFER_SIZE + 1, sizeof (char));
+	if (!buff_read)
+		return (NULL);
+	buff_stash = read_file(buff_read, buff_stash, fd);
 	if (!buff_stash)
 	{
 		free(buff_stash);
