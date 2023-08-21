@@ -19,8 +19,6 @@ size_t	ft_strlen(const char *s)
 	size_t	i;
 
 	i = 0;
-	if (!s)
-		return (i);
 	while (s[i] != '\0')
 		i++;
 	return (i);
@@ -69,14 +67,6 @@ char	*ft_strjoin_gnl(char const *s1, char const *s2)
 
 	if (!s1 && !s2)
 		return (NULL);
-/*	else if (!s1)
-	{
-		len2 = ft_strlen(s2);
-		new = malloc(len2 + 1);
-		if (!new)
-			return (NULL);
-		ft_strlcpy(new, s2, len2 + 1);
-	}*/
 	len1 = ft_strlen(s1);
 	len2 = ft_strlen(s2);
 	new = malloc(len1 + len2 + 1);
@@ -84,6 +74,7 @@ char	*ft_strjoin_gnl(char const *s1, char const *s2)
 		return (NULL);
 	ft_strlcpy(new, s1, len1 + 1);
 	ft_strlcpy(new + len1, s2, len2 + 1);
+	free((char *)s1);
 	return (new);
 }
 
@@ -92,6 +83,8 @@ void	*ft_calloc_gnl(unsigned int count, unsigned int size)
 	unsigned int	tot;
 	char			*buff;
 
+	if (size > 0 && count > ULONG_MAX / size)
+		return (NULL);
 	tot = count * size;
 	buff = malloc(tot);
 	if (!buff)

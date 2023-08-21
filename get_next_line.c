@@ -15,6 +15,28 @@
 #include "get_next_line.h"
 
 /**/
+char	*ft_substr_gnl(char const *s, unsigned int start, size_t n)
+{
+	size_t	len_s;
+	size_t	size;
+	char	*dst;
+
+	len_s = ft_strlen(s);
+	if (!s)
+		return (NULL);
+	if (start >= len_s)
+		return (NULL);
+	size = n + 1;
+	if (start + n > len_s)
+		size = len_s - start + 1;
+	dst = malloc(size);
+	if (!dst)
+		return (NULL);
+	ft_strlcpy(dst, s + start, size);
+	return (dst);
+}
+
+/**/
 char	*read_file(char *buff_stash, int fd)
 {
 	char	*buff_read;
@@ -32,8 +54,11 @@ char	*read_file(char *buff_stash, int fd)
 			free(buff_read);
 			return (NULL);
 		}
-		buff_stash = ft_strjoin_gnl(buff_stash, buff_read);
-		if (ft_strchr(buff_stash, '\n'))
+		if (buff_stash)
+			buff_stash = ft_strjoin_gnl(buff_stash, buff_read);
+		else
+			buff_stash = ft_substr_gnl(buff_read, 0, ft_strlen(buff_read));
+		if (buff_stash && ft_strchr(buff_stash, '\n'))
 			bytes_read = 0;
 	}
 	free(buff_read);
@@ -47,9 +72,10 @@ char	*stash_clean(char *buff_stash)
 	char	*position;
 
 	position = ft_strchr(buff_stash, '\n');
-	if (position && ++position)
+	if (position)
 	{
-		new_stash = ft_strjoin_gnl(new_stash, position);
+		position++;
+		new_stash = ft_substr_gnl(position, 0, ft_strlen(position));
 		free(buff_stash);
 		return (new_stash);
 	}
@@ -57,18 +83,12 @@ char	*stash_clean(char *buff_stash)
 	return (NULL);
 }
 
-/*Main function.*/
-char	*get_next_line(int fd)
+/**/
+char	*create_line(char *buff_stash)
 {
-	static char	*buff_stash;
-	char		*buff_line;
-	size_t		size;
+	size_t	size;
+	char	*buff_line;
 
-	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
-		return (NULL);
-	buff_stash = read_file(buff_stash, fd);
-	if (!buff_stash)
-		return (NULL);
 	if (ft_strchr(buff_stash, '\n'))
 		size = ft_strchr(buff_stash, '\n') - buff_stash + 2;
 	else
@@ -80,6 +100,24 @@ char	*get_next_line(int fd)
 		return (NULL);
 	}
 	ft_strlcpy(buff_line, buff_stash, size);
+	return (buff_line);
+}
+
+/*Main function.*/
+char	*get_next_line(int fd)
+{
+	static char	*buff_stash;
+	char		*buff_line;
+
+	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0 || fd > OPEN_MAX)
+		return (NULL);
+	buff_stash = read_file(buff_stash, fd);
+	if (!buff_stash)
+	{
+		free(buff_stash);
+		return (NULL);
+	}
+	buff_line = create_line(buff_stash);
 	buff_stash = stash_clean(buff_stash);
 	return (buff_line);
 }
