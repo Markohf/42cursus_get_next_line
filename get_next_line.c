@@ -50,8 +50,6 @@ char	*read_file(char *buff_read, char *buff_stash, int fd)
 			free(buff_read);
 			return (NULL);
 		}
-		else if (bytes_read == 0)
-			break ;
 		buff_read[bytes_read] = '\0';
 		if (buff_stash)
 			buff_stash = ft_strjoin_gnl(buff_stash, buff_read);
