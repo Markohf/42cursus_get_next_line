@@ -10,25 +10,32 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-/**/
+/*Auxiliar functions*/
 
 #include "get_next_line.h"
 
-size_t	ft_strlen(const char *s)
+/*Returns the length of a string.*/
+size_t	ft_strlen_gnl(const char *s)
 {
 	size_t	i;
 
+	if (!s)
+		return (0);
 	i = 0;
 	while (s[i] != '\0')
 		i++;
 	return (i);
 }
 
-char	*ft_strchr(const char *s, int c)
+/*Looks for char "c" in the string "s". If "c = 0",
+then returns a pointer to "s". If doesn't finds "c", then returns "NULL".*/
+char	*ft_strchr_gnl(const char *s, int c)
 {
 	char	*p_s;
 	char	c_c;
 
+	if (!s)
+		return (NULL);
 	p_s = (char *)s;
 	c_c = (char)c;
 	while (*p_s)
@@ -42,6 +49,8 @@ char	*ft_strchr(const char *s, int c)
 	return (NULL);
 }
 
+/*Copies "n - 1" bytes of "src" to "dst".
+Uses "n - 1" because the "n" byte will be "\0". Returns the length of "src".*/
 size_t	ft_strlcpy(char *dst, const char *src, size_t n)
 {
 	size_t	i;
@@ -56,9 +65,10 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t n)
 		}
 		dst[i] = '\0';
 	}
-	return (ft_strlen(src));
+	return (ft_strlen_gnl(src));
 }
 
+/*Creates a new string concatenating "s1" and "s2".*/
 char	*ft_strjoin_gnl(char const *s1, char const *s2)
 {
 	size_t	len1;
@@ -67,8 +77,8 @@ char	*ft_strjoin_gnl(char const *s1, char const *s2)
 
 	if (!s1 && !s2)
 		return (NULL);
-	len1 = ft_strlen(s1);
-	len2 = ft_strlen(s2);
+	len1 = ft_strlen_gnl(s1);
+	len2 = ft_strlen_gnl(s2);
 	new = malloc(len1 + len2 + 1);
 	if (!new)
 		return (NULL);
@@ -78,6 +88,7 @@ char	*ft_strjoin_gnl(char const *s1, char const *s2)
 	return (new);
 }
 
+/*Reserves clean memory space for "count" * "size" bytes.*/
 void	*ft_calloc_gnl(unsigned int count, unsigned int size)
 {
 	unsigned int	tot;
